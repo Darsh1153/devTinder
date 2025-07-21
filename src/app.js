@@ -2,16 +2,27 @@ const express = require("express");
 
 const app = express();
 
-app.get("/", (req, res) => {
-    res.send("Welcome to the home page");
+app.get("/user/:userId/:name/:password", (req, res) => {
+    console.log(req.params);
+    res.send({firstname: "Darshan", lastname: "Sharma"})
 })
 
-app.get("/about", (req, res) => {
-    res.send("Hello from about page");
+app.post("/test", (req, res) => {
+
+    res.send("data stored inside db");
 })
-app.get("/contact", (req, res) => {
-    res.send("Hello from contact page");
-})
+
+
+// app.get("/", (req, res) => {
+//     res.send("Welcome to the home page");
+// })
+
+// app.get("/about", (req, res) => {
+//     res.send("Hello from about page");
+// })
+// app.get("/contact", (req, res) => {
+//     res.send("Hello from contact page");
+// })
 
 app.listen(7777, () => {
     console.log("Server is running on port 7777");
