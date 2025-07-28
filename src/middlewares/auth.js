@@ -1,10 +1,25 @@
-const isAuthenticated = (req, res, next) => {
+const auth = (req, res, next) =>{
     const token = "xyz";
-    const isAuthenticatedValue = token === "xyz";
-    if(!isAuthenticatedValue){
-        res.status(401).send("unauthorized user :(");
+    const isAuthenticated = token === "xyz";
+    if(!isAuthenticated){
+        res.status(401).send("Unauthorized user");
     }else{
         next();
     }
 }
-module.exports = isAuthenticated;
+
+const userData = (req, res, next) => {
+    const token = "xyz";
+    const isAuthenticated = token === "xydhwz";
+    if(!isAuthenticated){
+        res.status(401).send("Unauthorized user");
+    }
+    else{
+        next();
+    }
+}
+
+module.exports = {
+    auth,
+    userData,
+}
