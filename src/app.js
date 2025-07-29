@@ -52,6 +52,14 @@ app.patch("/updateUser", async (req, res) => {
     const userId = req.body.userId;
     const data = req.body;
     try {
+        const ALLOWED_KEYS = ["userId", "firstName", "lastName", "password", "photoUrl", "about", "skills"];
+        const isUpdateAllowed = Object.keys(data).every((k) => ALLOWED_KEYS.includes(k));
+        if(!isUpdateAllowed){
+            throw new Error("Cannot update field");
+        }
+        if(data.skills.length > 5){
+            throw new Error("List out only 5 skills");
+        }
         const user = await User.findByIdAndUpdate({ _id: userId }, data, {runValidators: true})
         console.log(user);
         res.send("User updated successfully");
