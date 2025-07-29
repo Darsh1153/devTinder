@@ -1,48 +1,46 @@
-// const express = require("express");
-
-// const app = express();
-
-// const isAuthenticated = require("./middlewares/auth");
-
-
-
-// app.use("/admin", isAuthenticated);
-
-// app.get("/admin/getAllData", (req, res) => {
-//     res.send("All data retrieved successfully");
-// })
-
-// app.delete("/admin/deleteData", (req, res) => {
-//     res.send("Data deleted successfully");
-// })
-
-
-// app.listen(7777, () => {
-//     console.log("Server is running on port 7777");
-// })
-
-
 const express = require("express");
+
+const connectDb = require("./config/database");
+const User = require("./models/user");
 
 const app = express();
 
-const { auth, userData } = require("./middlewares/auth");
+app.use(express.json());    
 
-app.use("/admin", auth);
+app.post("/signup", async (req, res) => {
 
-app.get("/user/getData", userData, (req, res) => {
-    res.send("User data retrieved successfully");
+    const user = new User(req.body);
+    try{
+        await user.save();
+        res.send("User created successfully");
+    }catch(err){
+        res.status(400).send("Error creating user: " + err);
+    }
+
+    // const user = new User({
+    //     firstName: 123,
+    //     lastName: "Sharma",
+    //     mailId: "darshan@sharma.com",
+    //     password: "darshu@123",
+    // })
+    // try{
+    // await user.save();
+    // res.send("User created successfully");
+    // } catch (err){
+    //     res.status(400).send("Error creating user: " + err);
+    // }
 })
 
-app.get("/admin/getAllData", (req, res) => {
-    res.send("All data sent");
+connectDb()
+.then(() => {
+    console.log("connection established between database.");
+    app.listen(9000, () => {
+        console.log("Server connected on port 9000");
+    })
+})
+.catch(err => {
+    console.log("connection denied", err);
 })
 
-app.get("/admin/deleteData", (req, res) => {
-    res.send("Data deleted successfully");
-})
 
 
-app.listen(9000, () => {
-    console.log("Server is running on port 9000");
-})
