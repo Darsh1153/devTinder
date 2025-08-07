@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
     },
     photoUrl: {
         type: String,
-        default: " "
+        default: "https://media.licdn.com/dms/image/v2/D5603AQGV0Hmr4xaEaA/profile-displayphoto-shrink_400_400/B56ZZ3P8.fGQAg-/0/1745757393477?e=1757548800&v=beta&t=cDRvaI1pvhS0KYWTkor8iCxwpaJjnL4Ap-wwquO3q-o"
     },
     about: {
         type: String,
