@@ -3,28 +3,41 @@ import axios from "axios";
 import { useDispatch } from 'react-redux';
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../utils/constants';
 
 const Login = () => {
 
   const [emailId, setEmailId] = useState("darshan@gmail.com");
   const [password, setPassword] = useState("Darsh@123");
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const login = async () => {
     try {
-      const res = await axios.post("http://localhost:9000/login", {
+      const res = await axios.post(BASE_URL + "/login", {
         emailId: emailId,
         password: password,
-      }, {withCredentials: true})
-      // console.log(res);
-      dispatch(addUser(res.data));
-      navigate("/feed");
-    }
+      }, { withCredentials: true })
+      // console.log(res.data);
+      // Check if the response contains valid user data
+      if (res?.data?.firstName) {
+        dispatch(addUser(res.data));
+        return navigate("/");  // Redirect on successful login
+      } else {
+        setError("Invalid credentials, please try again.");
+      }
 
+    }
     catch (err) {
-      console.error("Error while fetching" + err);
+      // Check for an actual error object and handle accordingly
+      if (err?.response?.data) {
+        setError(err.response.data.message || "Something went wrong");
+      } else {
+        setError("Network error or invalid response");
+      }
+      console.error("Error while fetching: ", err?.message);
     }
   }
 
@@ -43,7 +56,9 @@ const Login = () => {
               <input type="password" className="input"
                 onChange={(e) => setPassword(e.target.value)} />
             </fieldset>
+
           </div>
+          <p className='text-red-500'>{error}</p>
           <div className="card-actions justify-center">
             <button className="btn btn-primary" onClick={login}>Login</button>
           </div>
