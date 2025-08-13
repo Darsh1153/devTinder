@@ -21,6 +21,9 @@ app.use(cors(
     }
 ));
 
+
+
+
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);

@@ -12,12 +12,21 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
     res.send(user);
 })
 
-profileRouter.patch("/profile/edit", userAuth, (req, res) => {
-    const isValid = validateAllowedFields(req);
-    const loggedInUser = req.user;
-    console.log(loggedInUser);
-    Object.keys(req.body).forEach((key) => loggedInUser[key] = req.body[key]);
-    console.log(loggedInUser);
+profileRouter.post("/profile/edit", userAuth, async (req, res) => {
+    try {
+        // if(!validateAllowedFields(req)){
+        //     throw new Error("Invalid edit request");
+        // }
+        const loggedInUser = req.user;
+        Object.keys(req.body).forEach((key) => loggedInUser[key] = req.body[key]);
+        await loggedInUser.save();
+        res.json({
+            message: `${loggedInUser.firstName}, your profile updated successfully`,
+            data: loggedInUser,
+        })
+    } catch(err){
+        res.status(400).send("ERROR : " + err.message);
+    }
 })
 
 
