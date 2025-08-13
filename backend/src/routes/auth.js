@@ -33,7 +33,7 @@ authRouter.post("/login", async (req, res) => {
         const { emailId, password } = req.body;
         const user = await User.findOne({ emailId: emailId });
         if (!user) {
-            throw new Error("Email id doesn't exist");
+            res.status(401).send("Invalid EmailID");
         }
         const passwordValidation = await user.validatePassword(password);
         if (passwordValidation) {
@@ -43,7 +43,7 @@ authRouter.post("/login", async (req, res) => {
             res.cookie("token", jwtToken);
             res.send(user);
         } else {
-            throw new Error("Password is not valid");
+            res.status(401).send("Invalid Password");
         }
     }
     catch (err) {
