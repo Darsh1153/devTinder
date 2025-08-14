@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { BASE_URL } from "./utils/constants";
-import { addConnections } from "./utils/connectionSlice";
+import { BASE_URL } from "../utils/constants";
+import { addConnections } from "../utils/connectionSlice";
 
 const Connections = () => {
   const dispatch = useDispatch();

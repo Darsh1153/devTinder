@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import NavBar from './NavBar'
+import NavBar from './components/NavBar'
 import { Outlet, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from './utils/constants'

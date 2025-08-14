@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import axios from "axios";
-import { BASE_URL } from "./utils/constants";
+import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from 'react-redux';
-import { addFeed } from './utils/feedSlice';
+import { addFeed } from '../utils/feedSlice';
 import UserCard from './UserCard';
 
 const Feed = () => {
@@ -24,9 +24,12 @@ const Feed = () => {
     getFeed();
   }, []);
 
+  if(!feed) return <div>No feed available now</div>
+  if(feed.length <= 0) return <div>No other field available</div>
+
   return (
     <div className='flex justify-center my-20'>
-      {feed && <UserCard user={feed[4]} />}
+      {feed && <UserCard user={feed[0]} />}
     </div>
   )
 }
