@@ -14,6 +14,7 @@ const UserCard = ({user}) => {
                 <div className="card-body">
                     <h2 className="card-title">{user?.firstName} {user.lastName}</h2>
                     <p>{user?.about}</p>
+                    <div>{user?.age}, {user?.gender}</div>
                     <div>{user?.skills}</div>
                     <div className="card-actions justify-end">
                         <button className="btn btn-primary">Interested</button>
