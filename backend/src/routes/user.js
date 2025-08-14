@@ -7,34 +7,27 @@ const User = require("../models/user");
 const USER_SAFE_DATA = "firstName lastName photoUrl about skills age gender"
 
 // GET all connection requests in loggedIn user.
-userRouter.get("/user/request/received", userAuth, async (req, res) => {
-    try {
-        const loggedInUser = req.user;
-        const connectionRequests = await ConnectionRequest.find({
-            toUserId: loggedInUser._id,
-            status: "interested",
-        }).populate("fromUserId", ["firstName", "lastName"]);
-        res.json({ connectionRequests: connectionRequests });
-    }
-    catch (err) {
-        res.status(400).json({ message: "ERROR: " + err.message });
-    }
-})
-
 userRouter.get("/user/connections", userAuth, async (req, res) => {
     try {
-        const loggedInUser = req.user;
-        const connections = await ConnectionRequest.find({
-            $or: [
-                { toUserId: loggedInUser._id, status: "accepted" },
-                { fromUserId: loggedInUser._id, status: "accepted" },
-            ]
-        }).populate("fromUserId", ["firstName", "lastName"]);
-        res.json({ connectionLists: connections });
+      const userId = req.user._id;
+  
+      const connections = await ConnectionRequest.find({
+        $or: [
+          { fromUserId: userId, status: "accepted" },
+          { toUserId: userId, status: "accepted" }
+        ]
+      })
+        .populate("fromUserId", "firstName lastName emailId photoUrl about skills") // Only needed fields
+        .populate("toUserId", "firstName lastName emailId photoUrl about skills");
+  
+      res.json(connections);
     } catch (err) {
-        res.status(400).json({ message: "ERROR: " + err.message });
+      console.error(err);
+      res.status(500).json({ message: "Server error" });
     }
-})
+  });
+
+
 
 userRouter.get("/feed", userAuth, async (req, res) => {
     try {
