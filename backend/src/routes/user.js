@@ -9,23 +9,43 @@ const USER_SAFE_DATA = "firstName lastName photoUrl about skills age gender"
 // GET all connection requests in loggedIn user.
 userRouter.get("/user/connections", userAuth, async (req, res) => {
     try {
-      const userId = req.user._id;
-  
-      const connections = await ConnectionRequest.find({
-        $or: [
-          { fromUserId: userId, status: "accepted" },
-          { toUserId: userId, status: "accepted" }
-        ]
-      })
-        .populate("fromUserId", "firstName lastName emailId photoUrl about skills") // Only needed fields
-        .populate("toUserId", "firstName lastName emailId photoUrl about skills");
-  
-      res.json(connections);
+        const userId = req.user._id;
+
+        const connections = await ConnectionRequest.find({
+            $or: [
+                { fromUserId: userId, status: "accepted" },
+                { toUserId: userId, status: "accepted" }
+            ]
+        })
+            .populate("fromUserId", "firstName lastName emailId photoUrl about skills gender age") // Only needed fields
+            .populate("toUserId", "firstName lastName emailId photoUrl about skills gender age");
+
+        res.json(connections);
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Server error" });
+        console.error(err);
+        res.status(500).json({ message: "Server error" });
     }
-  });
+});
+
+userRouter.get("/request/user/connections", userAuth, async (req, res) => {
+    try{
+        const loggedInUserId = req.user._id;
+
+        // Assuming you have a ConnectionRequest model
+        const requests = await ConnectionRequest.find({
+            toUserId: loggedInUserId,
+            status: "interested" // or whatever status field you use
+        })
+            .populate("fromUserId", "firstName lastName photoUrl about gender age") // populate sender info
+            .populate("toUserId", "firstName lastName photoUrl about gender age");    // populate receiver info
+
+        res.json(requests);
+    } catch (err) {
+        console.error("Error fetching incoming requests:", err.message);
+        res.status(500).json({ error: "Server error fetching requests" });
+    }
+});
+
 
 
 
