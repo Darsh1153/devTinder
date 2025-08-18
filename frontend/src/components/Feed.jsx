@@ -25,7 +25,7 @@ const Feed = () => {
   }, []);
 
   if(!feed) return <div>No feed available now</div>
-  if(feed.length <= 0) return <div>No other field available</div>
+  if(feed.length <= 0) return <div className='flex justify-center'>No other field available</div>
 
   return (
     <div className='flex justify-center my-20'>
