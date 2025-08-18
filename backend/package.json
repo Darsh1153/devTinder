@@ -4,6 +4,7 @@
   "description": "Dev tinder a platform for connecting developers",
   "main": "index.js",
   "scripts": {
+    "start": "node src/app.js",
     "dev": "nodemon src/app.js"
   },
   "keywords": [
