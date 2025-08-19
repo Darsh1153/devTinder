@@ -9,6 +9,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 
+require('dotenv').config()
+
 
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
@@ -34,7 +36,7 @@ app.use("/", userRouter);
 connectDb()
     .then(() => {
         console.log("connection established between database.");
-        app.listen(9000, () => {
+        app.listen(process.env.PORT, () => {
             console.log("Server connected on port 9000");
         })
     })
